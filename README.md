@@ -1,3 +1,75 @@
+### VScode setup 
+
+To setup VScode on Katana compute nodes, we need to set a few things up first. 
+
+
+##### SSH
+
+You will need to add a separate 
+
+Add the following to your `~/.ssh/config` file: 
+
+```
+Host katana
+  Hostname katana.restech.unsw.edu.au
+  User YOUR_USERNAME
+```
+This should allow you to use a convenient alias to `ssh` into a login node.  
+
+> NOTE: you should already have passwordless access to Katana, if not use `ssh-copy-id user@host`.  If you don't already have a key, use `ssh-keygen`. 
+
+
+The following one-liner uses the katana login node as a "jump host" from which to login to the specific machine in which the job is running (in this case, k099). 
+
+`ssh -J katana k099`
+
+We can achieve this under a new `HostName` in our config file. 
+
+
+Your `config` file should look something like this afterward: 
+
+```ssh
+
+# login node on katana.  We will use this as a "jump" host
+Host katana
+  Hostname katana.restech.unsw.edu.au
+  User YOUR_USERNAME
+
+Host k099
+  HostName k099
+  ProxyJump katana
+
+# Send keepalive packets to prevent SSH disconnecting...
+Host *
+  ServerAliveInterval 60
+```
+
+
+
+
+
+##### Miniconda3 installation 
+
+Sometimes `venv` environments do not automatically show up in VScode's kernel list.  For this reason, I will demonstrate with `conda` environments. 
+
+
+
+> NOTE: to use the Grace Hopper (GH200) node, you will need to install the `aarch64` version of conda [here](https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-aarch64.sh)
+
+
+
+Confirm GPU status 
+
+`watch nvidia-smi` 
+
+
+```python
+# Confirm that we can access GPUs
+torch.cuda.get_device_name(torch.cuda.current_device())
+# 
+```
+
+# Other stuff
 # katana
 Useful stuff for using UNSW katana
 
