@@ -17,7 +17,7 @@ ln -s $SCRATCH/.apptainer .apptainer
 ll .apptainer
 
 mv ~/miniconda3 $SCRATCH
-ln -s
+ln -s $SCRATCH/miniconda3 ~/miniconda3
 ncdu ~
 ```
 ### Reproducibility 
