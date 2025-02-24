@@ -2,6 +2,40 @@
 
 To setup VScode on Katana compute nodes, we need to set a few things up first. 
 
+##### Submit a job 
+
+In this demonstration, we will use an interactive session and request 1 GPU. 
+
+Our batch file looks something like this: 
+
+`interactive_gpu.pbs` 
+
+```bash
+#! /usr/bin/env bash
+
+#PBS -I 
+#PBS -l select=1:ncpus=6:ngpus=1:mem=46gb
+#PBS -l walltime=4:00:00
+#PBS -M YOUR_EMAIL_ADDRESS
+#PBS -m ae
+#PBS -j oe
+```
+Submit using 
+`qsub /path/to/interactive_gpu.pbs` 
+
+You should then see something like 
+
+```
+qsub: waiting for job <JOB_NUMBER>.kman.restech.unsw.edu.au to start
+qsub: job <JOB_NUMBER>.kman.restech.unsw.edu.au ready
+
+We can confirm that we have GPU access by typing `nvidia-smi`. 
+
+You will need to figure out the `hostname` of the compute node you are currently on for this job. This can be easily obtained by typing
+
+`$ hostname`
+
+In our case, we see `k099`. 
 
 ##### SSH
 
@@ -23,9 +57,13 @@ The following one-liner uses the katana login node as a "jump host" from which t
 
 `ssh -J katana k099`
 
-We can achieve this under a new `HostName` in our config file.  
+You can run `nvidia-smi` again to confirm that this is the same node that we have access to with our shell instance given to us when we submitted with `qsub`. 
 
-> NOTE: this will only work if you have submitted (and are currently running) a job via `qsub` that is on the node specified; in our case k099.  Otherwise, your ssh session will immediately exit. 
+Exit and return to your local machine.
+
+> NOTE: when exiting an ssh connection using a jump host, you will exit both levels at the same time, thus typing `hostname` immediately after this should show your local machine's name (not `katana1` or similar). 
+
+We can achieve this command more simply by creating another alias, under a new `HostName` in our config file.  
 
 
 Your `config` file should look something like this afterward: 
@@ -46,6 +84,10 @@ Host *
   ServerAliveInterval 60
 ```
 
+We can now simply type `ssh k099` to gain access to the compute node. 
+> NOTE: this will only work if you have submitted (and are currently running) a job via `qsub` that is on the node specified; in our case k099.  Otherwise, your ssh session will immediately exit. 
+
+
 
 
 
@@ -53,6 +95,9 @@ Host *
 ##### Miniconda3 installation 
 
 Sometimes `venv` environments do not automatically show up in VScode's kernel list.  For this reason, I will demonstrate with `conda` environments. 
+
+[Download](https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh) the installer 
+
 
 
 
