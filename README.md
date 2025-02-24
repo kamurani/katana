@@ -96,9 +96,10 @@ We can now simply type `ssh k099` to gain access to the compute node.
 
 Sometimes `venv` environments do not automatically show up in VScode's kernel list.  For this reason, I will demonstrate with `conda` environments. 
 
-[Download](https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh) the installer 
+1. [Download](https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh) the installer
+1. TODO: install instructions
 
-
+It may be helpful to move your `miniconda3` from your home directory to `$SCRATCH`, although this may result in slower environment solving.  This is because Katana unfortunately only gives users a 15GB quota on their home directory, which can fill up quickly (especially if you use multiple python versions or environments across a handful of projects). 
 
 
 > NOTE: to use the Grace Hopper (GH200) node, you will need to install the `aarch64` version of conda [here](https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-aarch64.sh)
@@ -109,11 +110,44 @@ Confirm GPU status
 
 `watch nvidia-smi` 
 
+##### Connect with VScode
+
+Click on the SSH button in the bottom left corner of a VScode window.  You should see the alias created earlier when prompted to connect to a host. We can then select a folder on the host filesystem to open, and a terminal instance should start.  Confirm by typing `hostname` that we are on the desired compute node (not the login node). You might be prompted to install any software that you don't already have on the remote system in order for the VScode remote connection to work. 
+
+Open a jupyter notebook (`.ipynb` file) and in the top right corner, you should be able to select a python kernel.  VScode will automatically search for python interpreters, such as in your `~/miniconda3/envs/` (or similar) directory. 
+
+> NOTE: you may have to manually install the Jupyter extension in the Extensions tab on VScode.
+
+
+To test out our notebook, let's try and use the GPU we now have access to. 
+
+```zsh
+conda create -n torch-nb
+
+# use --prefix alternatively?
+# then add symlink to /envs/ ?
+
+conda activate torch-nb
+conda install jupyter 
+```
+
+Next, install PyTorch using conda or pip using instructions [here](https://pytorch.org/get-started/locally/) 
+
+Make sure that torch is compiled with CUDA enabled.  To confirm, we can type 
+`python -c "import torch; print(torch.version.cuda)"`
+
+To confirm that we are using python from within our newly created environment: `which -a python` 
+
+Now, load this conda environment by selecting it within the VScode notebook interface. 
+
+> NOTE: if a python environment doesn't show up under the kernel list, try Cmd+Shift+P and select `Developer: Reload Window` to cause VScode to scan through valid python interpreters again. 
+
+
 
 ```python
 # Confirm that we can access GPUs
-torch.cuda.get_device_name(torch.cuda.current_device())
-# 
+>>> torch.cuda.get_device_name(torch.cuda.current_device())
+'NVIDIA H200'
 ```
 
 # Other stuff
