@@ -28,7 +28,7 @@ You should then see something like
 ```
 qsub: waiting for job <JOB_NUMBER>.kman.restech.unsw.edu.au to start
 qsub: job <JOB_NUMBER>.kman.restech.unsw.edu.au ready
-
+```
 We can confirm that we have GPU access by typing `nvidia-smi`. 
 
 You will need to figure out the `hostname` of the compute node you are currently on for this job. This can be easily obtained by typing
