@@ -23,7 +23,9 @@ The following one-liner uses the katana login node as a "jump host" from which t
 
 `ssh -J katana k099`
 
-We can achieve this under a new `HostName` in our config file. 
+We can achieve this under a new `HostName` in our config file.  
+
+> NOTE: this will only work if you have submitted (and are currently running) a job via `qsub` that is on the node specified; in our case k099.  Otherwise, your ssh session will immediately exit. 
 
 
 Your `config` file should look something like this afterward: 
