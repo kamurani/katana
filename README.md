@@ -39,7 +39,7 @@ In our case, we see `k099`.
 
 ##### SSH
 
-You will need to add a separate 
+You will need to add a separate `HostName` to your `.ssh` config file for each compute node on katana that you wish to have access to using a single SSH connection from VScode.
 
 Add the following to your `~/.ssh/config` file: 
 
@@ -57,7 +57,11 @@ The following one-liner uses the katana login node as a "jump host" from which t
 
 `ssh -J katana k099`
 
+
+
 You can run `nvidia-smi` again to confirm that this is the same node that we have access to with our shell instance given to us when we submitted with `qsub`. 
+
+> NOTE: if using a non-UNSW computer, this may use your local machine's username by default when trying to get into `k099`.  Try `ssh -J katana YOUR_ZID@k099` instead.
 
 Exit and return to your local machine.
 
