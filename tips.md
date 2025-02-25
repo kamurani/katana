@@ -1,4 +1,14 @@
-### Running VScode in background automatically 
+# Draft:
+
+#### Add VScode to your `$PATH`
+
+Open the Command Palette (`Cmd+Shift+P`), type 'shell command', and run the **Shell Command: Install 'code' command in PATH** command.
+
+Restart the terminal for the new `$PATH` value to take effect.
+
+
+# Docs Development:
+#### Running VScode in background automatically 
 
 
 See: 
