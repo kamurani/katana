@@ -91,7 +91,15 @@ Host *
 We can now simply type `ssh k099` to gain access to the compute node. 
 > NOTE: this will only work if you have submitted (and are currently running) a job via `qsub` that is on the node specified; in our case k099.  Otherwise, your ssh session will immediately exit. 
 
+As mentioned before, typing `ssh k099` may use your local machine's username for the 2nd (from the katana login node --> the compute node).  If your username on your local machine happens to be the same as your username on katana (such as your zID), then this won't matter.  But to be safe, you can simply define your katana-specific username explicitly:
 
+```ssh
+Host k099
+  HostName k099
+  User YOUR_KATANA_USERNAME
+  ProxyJump katana
+
+```
 
 
 
