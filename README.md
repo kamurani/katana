@@ -1,6 +1,25 @@
+## Using VScode Jupyter notebooks on Katana compute nodes
+
+##### Preamble 
+Running interactive Jupyter notebooks is an increasingly popular way to develop and test software, particularly when working with ML/AI where iterative and quick development is key to testing and refining models, validating training loops, and sanity-checking batching processes for large-scale training. 
+
+In particular, IDE support for Jupyter notebooks such as with VScode is a great way to ease the burden of interacting with notebooks, as they provide features such as: 
+
+* lower latency than browser-based Juyter notebook interfaces
+* linting of imported libraries
+* GUI-based version control
+* debugging
+* management of environments (e.g. conda or python `venv` virtual environments)
+* marketplace for 3rd party extensions
+* AI-assisted code completion
+* customisable preferences e.g. syntax highlighting
+* remote access management e.g. SSH 
+
+However, some considerations have to be made when trying to integrate VScode with a HPC cluster environment such as Katana, due to the necessary tradeoffs between distributed computing resources necessary for scalability. This tutorial will show you one way of accessing Katana's HPC resources, all from within a single VScode instance - no port forwarding required.
+
 ### VScode setup 
 
-To setup VScode on Katana compute nodes, we need to set a few things up first. 
+To use VScode on Katana compute nodes, we need to set a few things up first. 
 
 ##### Submit a job 
 
