@@ -7,6 +7,18 @@ Open the Command Palette (`Cmd+Shift+P`), type 'shell command', and run the **Sh
 Restart the terminal for the new `$PATH` value to take effect.
 
 
+#### Open VScode SSH window programmatically 
+
+
+`code --remote ssh-remote+hostname /some/dir`
+
+
+#### Putting it all together 
+
+TODO: script that does everything
+
+
+
 # Docs Development:
 #### Running VScode in background automatically 
 
