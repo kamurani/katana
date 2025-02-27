@@ -33,30 +33,13 @@ class PBSServer:
         self.remotehost = remotehost
         self.print_output = print_output
         self.verbose = verbose
-
-
-
-        #initialise the print_stdout decorator with print_output set to True
-
-        # TODO: 
-        # figure out how to add a decorator which, depending on a class attribute (self.print_output), 
-        # will do different things.
-        # self.print_stdout = partial(print_stdout, print_output=True)
-
         
         # Find remotehost in the known_hosts file
         SSH_CONFIG_PATH = Path.home().resolve() / ".ssh" / "config"
         assert SSH_CONFIG_PATH.is_file(), f"SSH config file not found at {SSH_CONFIG_PATH}"
 
-        # Get hostnames from ssh config
-        with open(SSH_CONFIG_PATH, "r") as f:
-            ssh_config = f.read()
-
-        hostnames = []
-        for line in ssh_config.split("\n"):
-            if line.startswith("Host "):
-                current = line.split()[1]
-                hostnames.append(current)
+        c = read_ssh_config(expanduser("~/.ssh/config"))
+        hostnames = c.hosts()
 
             
         if self.verbose: print(f"Found {len(hostnames)} hostnames in ssh config")
