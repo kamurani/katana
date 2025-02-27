@@ -1,8 +1,6 @@
 import subprocess
 import os
 
-
-
 from functools import partial
 from typing import Tuple
 from pathlib import Path
@@ -10,7 +8,7 @@ from pathlib import Path
 from sshconf import read_ssh_config
 from os.path import expanduser
 
-
+SSH_CONFIG_PATH = "~/.ssh/config"
 
 class PBSServer:
     """Class to interact with the PBS server.
@@ -25,7 +23,7 @@ class PBSServer:
     """
     def __init__(
         self, 
-        remotehost: str = "katana",
+        remotehost: str,
         print_output: bool = False,
         verbose: bool = True,
 
@@ -34,17 +32,18 @@ class PBSServer:
         self.print_output = print_output
         self.verbose = verbose
         
-        # Find remotehost in the known_hosts file
-        SSH_CONFIG_PATH = Path.home().resolve() / ".ssh" / "config"
-        assert SSH_CONFIG_PATH.is_file(), f"SSH config file not found at {SSH_CONFIG_PATH}"
+        ssh_config_path = Path(expanduser(SSH_CONFIG_PATH))
+        assert ssh_config_path.is_file(), f"SSH config file not found at {ssh_config_path}"
 
-        c = read_ssh_config(expanduser("~/.ssh/config"))
-        hostnames = c.hosts()
-
-            
+        c = read_ssh_config(ssh_config_path)
+        hostnames = c.hosts() 
         if self.verbose: print(f"Found {len(hostnames)} hostnames in ssh config")
 
-        # Scan for the remotehost in the known_hosts file
+        # check that supplied hostname is in the ssh config
+        assert remotehost in hostnames, f"Specified hostname '{remotehost}' not found in ssh config"
+        username = c.host(remotehost)["user"]
+        self.username = username
+        if self.verbose: print(f"Found hostname '{remotehost}' in ssh config. Using username '{username}'")
 
 
 
@@ -73,12 +72,13 @@ class PBSServer:
     
     def ssh_jump_execute(self, cmd: str, target_node: str, login_node: str = None):
         login_node = self.remotehost if login_node is None else login_node
-        cmd = ["ssh", "-J", login_node, f"{target_node}", cmd]
+        cmd = ["ssh", "-J", login_node, f"{self.username}@{target_node}", cmd]
         captured = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False)
         stdout = captured.stdout.read().decode()
         stderr = captured.stderr.read().decode()
         return stdout, stderr
     
+    @print_stdout
     def check_gpu(
         self, 
         node: str = None, 

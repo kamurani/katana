@@ -1,0 +1,2 @@
+ls $SCRATCH
+cd $SCRATCH
